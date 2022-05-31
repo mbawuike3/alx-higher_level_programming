@@ -1,42 +1,42 @@
 #include "lists.h"
 
 /**
- * insert_node - inserts a number into a sorted singly linked list.
- * @head: list head
- * @number: number to store in the new node
- * Return: pointer to the new node
+ *insert_node - insert a node at the position in wich the list keep sorted
+ *@head: head of the linked list
+ *@number: value of the node to add
+ *
+ *Return: new linked list
  */
 listint_t *insert_node(listint_t **head, int number)
 {
-        listint_t *runner;
-        listint_t *new;
+	listint_t *new, *actual;
 
-        runner = *head;
-
-        new = malloc(sizeof(listint_t));
-        if (new == NULL)
-                return (NULL);
-        new->n = number;
-
-        if (*head == NULL || (*head)->n > number)
-        {
-                new->next = *head;
-                *head = new;
-                return (new);
-        }
-
-        while (runner->next != NULL)
-        {
-                if ((runner->next)->n >= number)
-                {
-                        new->next = runner->next;
-                        runner->next = new;
-                        return (new);
-                }
-                runner = runner->next;
-        }
-
-        new->next = NULL;
-        runner->next = new;
-        return (new);
+	if (*head == NULL)
+	{
+		new = malloc(sizeof(listint_t));
+		new->n = number;
+		new->next = NULL;
+		*head = new;
+		return (*head);
+	}
+	new = malloc(sizeof(listint_t));
+	new->n = number;
+	actual = *head;
+	if (number < (actual->n))
+	{
+		new->next = actual;
+		*head = new;
+		return(*head);
+	}
+	while (number > (actual->next->n) && actual->next->next != NULL)
+		actual = actual->next;
+	if(actual->next->next == NULL && actual->next->n < number)
+	{
+		actual->next->next = new;
+		new->next = NULL;
+		return(*head);
+	}
+	new->next = actual->next;
+	actual->next = new;
+	return(*head);
 }
